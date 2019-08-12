@@ -11,6 +11,9 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ChatComponent } from './components/chat/chat.component';
 import { FormsModule } from '@angular/forms';
 
+import { ChatService } from '../app/services/chat.service';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +26,9 @@ import { FormsModule } from '@angular/forms';
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    ChatService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,13 +10,19 @@ import { ChatService } from '../../services/chat.service';
 export class ChatComponent {
   mensaje = '';
   constructor(public _cs: ChatService) {
-    this._cs.cargarMensajes().subscribe((mensajes: any[]) => {
-      console.log(mensajes);
-    } );
+    this._cs.cargarMensajes().subscribe();
    }
 
   enviarMensaje() {
-    console.log(this.mensaje);
+    if (this.mensaje.length === 0 ) {
+      return;
+    }
+
+    this._cs.agregarMensaje(this.mensaje).then(() => {
+      this.mensaje = '';
+    }).catch((err) => {
+      console.error('Error al neviar', err);
+    });
   }
 
 }

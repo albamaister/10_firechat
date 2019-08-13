@@ -15,6 +15,8 @@ export class ChatService {
   public chats: Mensaje[] = [];
   public usuario: any = {};
 
+  nombre = '';
+
   private itemsCollection: AngularFirestoreCollection<Mensaje>;
 
   constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
@@ -30,17 +32,24 @@ export class ChatService {
 
       this.usuario.name = user.displayName;
       this.usuario.uid = user.uid;
+      this.nombre = (this.usuario.name);
 
     });
    }
 
 
    login( proveedor: string) {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+     if (proveedor === 'Google') {
+      this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+     } else {
+      this.afAuth.auth.signInWithPopup(new auth.TwitterAuthProvider());
+     }
+
   }
 
 
   logout() {
+    this.usuario = {};
     this.afAuth.auth.signOut();
   }
    cargarMensajes() {
@@ -58,10 +67,11 @@ export class ChatService {
    agregarMensaje(texto: string) {
      // TODO falta el UID del usuario
       let mensaje: Mensaje = {
-        nombre: 'Andres123',
+        nombre: this.nombre,
         mensaje: texto,
-        fecha: new Date().getTime()
-      }
+        fecha: new Date().getTime(),
+        uid: this.usuario.uid
+      };
 
       return this.itemsCollection.add(mensaje);
    }
